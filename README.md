@@ -57,5 +57,5 @@ python ./EpiScan/commands/epimapping.py --test ./dataProcess/public/public_sep_t
 
 ## Webserver
 
-[comming soon]()
+[coming soon]()
 
