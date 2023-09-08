@@ -1,5 +1,5 @@
 # EpiScan
-Attention-Based Model for Antibody-Specific Epitope Mapping with Integrating Biological Priors 
+EpiScan: Attention-Based Model for High-Throughput Antibody-Specific Epitope Mapping 
 
 ## Dependencies
 
@@ -37,15 +37,23 @@ The Antigen Sample data format is the following:
 
 The trained models can be refered in the `./trained_model/Seq_final.sav`.
 
+.h5 file（language model embedding） generate : 
+
+```
+#***********************
+python ./EpiScan/commands/embed.py --seqs ./dataProcess/public/DB1.fasta --outfile ./dataProcess/public/DB1.h5 --device 0
+#***********************
+```
+
 Training script : 
 
 ```
 #***********************
-python ./EpiScan/commands/train_sep-auc.py --train ./dataProcess/public/public_sep_trainAg.tsv --test ./dataProcess/public/public_sep_valAg.tsv --embedding ./dataProcess/public/fasta/DB1.h5 --lr 1e-4 --save-prefix ./save_model/2023 --no-augment  --device 0 --num-epochs 250 --batch-size 15
+python ./EpiScan/commands/train_sep-auc.py --train ./dataProcess/public/public_sep_trainAg.tsv --test ./dataProcess/public/public_sep_valAg.tsv --embedding ./dataProcess/public/DB1.h5 --lr 1e-4 --save-prefix ./save_model/2023 --no-augment  --device 0 --num-epochs 250 --batch-size 15
 #***********************
 ```
 
-Predicting script : 
+Predict script : 
 
 ```
 #***********************
@@ -57,5 +65,6 @@ python ./EpiScan/commands/epimapping.py --test ./dataProcess/public/public_sep_t
 
 ## Webserver
 
-[coming soon]()
+[SARS-CoV-2-specific model](http://43.138.221.72:8023/)
 
+H1N1-H3N2-specific model ([coming soon]())
