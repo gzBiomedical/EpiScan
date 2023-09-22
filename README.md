@@ -1,7 +1,7 @@
 # EpiScan
 EpiScan: Attention-Based Model for High-Throughput Antibody-Specific Epitope Mapping 
 
-![flow](.\img\flow.png)
+![flow](https://github.com/gzBiomedical/EpiScan/blob/master/img/flow.png)
 
 ## Dependencies
 
