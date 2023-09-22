@@ -1,6 +1,8 @@
 # EpiScan
 EpiScan: Attention-Based Model for High-Throughput Antibody-Specific Epitope Mapping 
 
+![image-20230922130532539](C:\Users\41655\AppData\Roaming\Typora\typora-user-images\image-20230922130532539.png)
+
 ## Dependencies
 
 + cuda >= 9.0
