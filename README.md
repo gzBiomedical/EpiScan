@@ -5,7 +5,7 @@ EpiScan: High-Throughput mapping of antibody-specific epitopes on viral proteins
 
 ## Webserver
 
-[EpiScan V1.0](http://43.138.221.72:8023/)
+[EpiScan V1.0](http://www.episcan.net:8023/)
 
 ## Dependencies
 
