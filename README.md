@@ -41,11 +41,11 @@ The Antigen Sample data format is the following:
 
 ## Models
 
-The trained models can be refered in the `./trained_model/Seq_final.sav`.
+The trained models can be refered in the `./trained_model/Seq_final.pth`.
 
 .h5 file（language model embedding） generate : 
 
-```
+```python
 #***********************
 python ./EpiScan/commands/embed.py --seqs ./dataProcess/public/DB1.fasta --outfile ./dataProcess/public/DB1.h5 --device 0
 #***********************
@@ -53,7 +53,7 @@ python ./EpiScan/commands/embed.py --seqs ./dataProcess/public/DB1.fasta --outfi
 
 Training script : 
 
-```
+```python
 #***********************
 python ./EpiScan/commands/train_sep-auc.py --train ./dataProcess/public/public_sep_trainAg.tsv --test ./dataProcess/public/public_sep_valAg.tsv --embedding ./dataProcess/public/DB1.h5 --lr 1e-4 --save-prefix ./save_model/2023 --no-augment  --device 0 --num-epochs 250 --batch-size 15
 #***********************
@@ -61,8 +61,17 @@ python ./EpiScan/commands/train_sep-auc.py --train ./dataProcess/public/public_s
 
 Predict script : 
 
-```
+```python
 #***********************
+# Use the 'epimapping.py' script to execute inference with the following command. This script will output predictions for antibody-specific epitopes on the antigen sequences.
+python ./EpiScan/commands/epimapping.py --test INPUT_DATA_FILE --embedding EMBEDDING_DATA_FILE
+
+# For INPUT_DATA_FILE: this file should list the identifier for each antigen-antibody pair along with the sequence of the antigen that you want to test. It should be formatted as a tab-separated values (TSV) file with each line representing one pair.
+
+# For EMBEDDING_DATA_FILE: this file contains the language model embeddings for the antigen sequences in HDF5 (.h5) format. You should ensure that you have already generated the embeddings for the antigens you wish to analyze. The file path provided should point to this HDF5 file that was generated using the 'embed.py' script.
+
+# For instance, if you have 'test_complexes.tsv' as your input file with antigen sequences and 'DB1.h5' as your embeddings file, your command would look like this:
+
 python ./EpiScan/commands/epimapping.py --test ./dataProcess/public/public_sep_testAg.tsv --embedding ./dataProcess/public/fasta/DB1.h5
 #***********************
 ```
