@@ -4,6 +4,10 @@ import torch
 import torch.utils.data
 
 import numpy as np
+import pandas as pd
+import subprocess as sp
+import sys
+import gzip as gz
 import h5py
 import multiprocessing as mp
 
@@ -27,6 +31,15 @@ def log(m, file=None, timestamped=True, print_also=False):
 def RBF(D, sigma=None):
     """
     Convert distance matrix into similarity matrix using Radial Basis Function (RBF) Kernel.
+
+    :math:`RBF(x,x') = \\exp{\\frac{-(x - x')^{2}}{2\\sigma^{2}}}`
+
+    :param D: Distance matrix
+    :type D: np.ndarray
+    :param sigma: Bandwith of RBF Kernel [default: :math:`\\sqrt{\\text{max}(D)}`]
+    :type sigma: float
+    :return: Similarity matrix
+    :rtype: np.ndarray
     """
     sigma = sigma or np.sqrt(np.max(D))
     return np.exp(-1 * (np.square(D) / (2 * sigma ** 2)))
@@ -45,6 +58,13 @@ def _hdf5_load_partial_func(k, file_path):
 def load_hdf5_parallel(file_path, keys, n_jobs=-1):
     """
     Load keys from hdf5 file into memory
+
+    :param file_path: Path to hdf5 file
+    :type file_path: str
+    :param keys: List of keys to get
+    :type keys: list[str]
+    :return: Dictionary with keys and records in memory
+    :rtype: dict
     """
     torch.multiprocessing.set_sharing_strategy("file_system")
 
@@ -68,13 +88,16 @@ def load_hdf5_parallel(file_path, keys, n_jobs=-1):
 class PairedDataset(torch.utils.data.Dataset):
     """
     Dataset to be used by the PyTorch data loader for pairs of sequences and their labels.
+
+    :param X0: List of first item in the pair
+    :param X1: List of second item in the pair
+    :param Y: List of labels
     """
 
-    def __init__(self, X0, X1, Y,catsite):
+    def __init__(self, X0, X1, Y):
         self.X0 = X0
         self.X1 = X1
         self.Y = Y
-        self.catsite = catsite
         assert len(X0) == len(X1), (
             "X0: "
             + str(len(X0))
@@ -82,8 +105,6 @@ class PairedDataset(torch.utils.data.Dataset):
             + str(len(X1))
             + " Y: "
             + str(len(Y))
-            + " catsite: "
-            + str(len(catsite))
         )
         # assert len(X0) == len(Y), (
         #     "X0: "
@@ -98,7 +119,7 @@ class PairedDataset(torch.utils.data.Dataset):
         return len(self.X0)
 
     def __getitem__(self, i):
-        return self.X0[i], self.X1[i], self.Y[i], self.catsite[i]
+        return self.X0[i], self.X1[i], self.Y[i]
 
 
 def collate_paired_sequences(args):
@@ -108,5 +129,4 @@ def collate_paired_sequences(args):
     x0 = [a[0] for a in args]
     x1 = [a[1] for a in args]
     y = [a[2] for a in args]
-    catsite = [a[3] for a in args]             
-    return x0, x1, torch.stack(y, 0),torch.stack(catsite, 0)
+    return x0, x1, torch.stack(y, 0)
