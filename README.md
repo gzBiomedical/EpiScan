@@ -33,11 +33,11 @@ The Antigen Sample data format is the following:
 
 list of dictionaries with complex_code(str)
 Each dictionary has the following keys:
-Indices [0:3] represent the 3D coordinates of the amino acids of the antigenic molecules.
-Indices [3:23] represent a one-hot encoding of the amino acid types.
-Indices [23:43] represent a conservation profile for that position across a set of homologous proteins obtained from PSI-BLAST (The initial column with a bias value of zero).
-Indices [43:63] represent a local amino acid profile that indicates the frequency of each amino acid type within 8 Å of the residue.
-Indices [63:65] represent the absolute and relative solvent accessible surface area of the residue, calculated by STRIDE.
+Indices [0-2] represent the 3D coordinates of the amino acids of the antigenic molecules.
+Indices [3-22] represent a one-hot encoding of the amino acid types.
+Indices [23-43] represent a conservation profile for that position across a set of homologous proteins obtained from PSI-BLAST (The initial column with a bias value of zero).
+Indices [44-63] represent a local amino acid profile that indicates the frequency of each amino acid type within 8 Å of the residue.
+Indices [64-65] represent the absolute and relative solvent accessible surface area of the residue, calculated by STRIDE.
 #***********************
 
 #***********************
@@ -50,7 +50,7 @@ The antigen features consist of several components that can be obtained as follo
 - Command: `psiblast -query input.fasta -db nr -num_iterations 3 -out_ascii_pssm output.pssm`
 - The PSSM (Position-Specific Scoring Matrix) values are extracted from the output file
 
-### 2. Local Amino Acid Profile (Indices [43-63])
+### 2. Local Amino Acid Profile (Indices [44-63])
 - Calculated using structural information
 - Tools needed: BioPython or similar structural analysis packages
 - Process:
@@ -58,13 +58,13 @@ The antigen features consist of several components that can be obtained as follo
   2. Calculate distances between residues
   3. Count amino acid frequencies within 8Å radius to get frequency profile
 
-### 3. Solvent Accessibility (Indices [63-65])
+### 3. Solvent Accessibility (Indices [64-65])
 - Calculated using STRIDE
 - Installation: Download STRIDE from http://webclu.bio.wzw.tum.de/stride/
 - Command: `stride input.pdb > output.stride`
 - Extract both absolute and relative accessibility values
 
-### 4. 3D Coordinates (Indices [0-3])
+### 4. 3D Coordinates (Indices [0-2])
 - Directly extracted from PDB files
 - Can be obtained using BioPython:
 ```python
