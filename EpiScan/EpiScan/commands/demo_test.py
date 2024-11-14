@@ -5,9 +5,10 @@ import pandas as pd
 import os
 import pickle
 import sys
-####
+# ###
 # os.chdir(r"PATH")
 # sys.path.append(os.getcwd())
+
 
 
 import torch
@@ -99,3 +100,4 @@ df = pd.DataFrame(probCon)
 df.to_csv('mappingResults.csv', index=False, header=None)
 
 
+a0 = encoding_dict['4JR9_A157']
